@@ -1,6 +1,6 @@
-# OpenPalantir - GEOINT Portal
+# OpenPalantir
 
-A world view portal for monitoring geospatial intelligence signals across aviation, maritime, thermal anomalies, and geopolitical events.
+A modular OSINT dashboard integrating NASA FIRMS, OpenSky, and Maritime AIS feeds into a unified 3D globe. Monitoring geopolitical flashpoints via automated geofencing and thermal anomaly detection.
 
 ## Architecture
 

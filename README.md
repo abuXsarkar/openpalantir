@@ -14,29 +14,61 @@ A modular OSINT dashboard integrating NASA FIRMS, OpenSky, and Maritime AIS feed
 ### Prerequisites
 - Docker & Docker Compose
 - Mapbox API token (free tier: https://account.mapbox.com/)
-- NASA FIRMS API key (get it here: https://firms.modaps.eosdis.nasa.gov/api/area/)
+- NASA FIRMS API key (optional - get it here: https://firms.modaps.eosdis.nasa.gov/api/area/)
 
-### Setup
+### Demo Mode (No API Keys Required)
+
+The portal includes realistic mock data for immediate testing:
+
+```bash
+# Set environment variable for mock mode
+export USE_MOCK_DATA=true
+
+# Start the stack
+docker-compose up --build
+```
+
+Access the portal at http://localhost:3000 - you'll see:
+- 10 sample aircraft including military callsigns (RCH, CNV, REACH, SPAR)
+- 8 thermal anomalies in conflict zones (Iraq, Syria, Yemen, Crimea)
+- Real-time alerts based on proximity detection
+- Full UI functionality with sample data
+
+### Live Mode (With API Keys)
 
 1. Get your NASA FIRMS API key:
    - Visit https://firms.modaps.eosdis.nasa.gov/api/area/
    - Request a free API key (instant approval)
-   - Set it as environment variable: `export NASA_FIRMS_API_KEY=your_key`
 
 2. Add your Mapbox token to `frontend/components/WorldMap.tsx`:
 ```typescript
 const MAPBOX_TOKEN = 'your_token_here'
 ```
 
-3. Start the stack:
+3. Configure environment:
+```bash
+export NASA_FIRMS_API_KEY=your_key
+export USE_MOCK_DATA=false
+```
+
+4. Start the stack:
 ```bash
 docker-compose up --build
 ```
 
-4. Access the portal:
+### Switching Between Modes
+
+The system automatically detects API availability:
+- If APIs are unavailable, it falls back to mock data
+- Check the status indicator in the top-right corner
+- Yellow badge = Demo Mode (mock data)
+- Green badge = Live Mode (real APIs)
+
+### Access Points
 - Frontend: http://localhost:3000
 - API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
+- System Status: http://localhost:8000/api/system/status
 
 ## Features
 
@@ -45,10 +77,19 @@ docker-compose up --build
 - NASA FIRMS thermal anomaly detection (3 conflict zones)
 - Intelligent alert system with proximity detection
 - Geofencing around 9 sensitive locations (airbases, nuclear sites, chokepoints)
+- Mock data mode for development/demo (no API keys required)
+- Automatic fallback to mock data when APIs unavailable
+- System status indicator showing data source mode
 - Tactical dark-mode UI with alert sidebar
 - Timeline scrubber (72-hour window)
 - GeoJSON-based data pipeline
 - PostGIS spatial queries
+
+### Mock Data Includes
+- 10 realistic aircraft positions with military callsigns
+- 8 thermal anomalies in active conflict zones
+- Historical data simulation for timeline testing
+- Automatic alert generation based on proximity rules
 
 ### Roadmap
 - Maritime AIS integration (Spire/Datalastic)
@@ -94,6 +135,14 @@ The system monitors for:
 ```bash
 cd backend
 pip install -r requirements.txt
+
+# Run with mock data
+export USE_MOCK_DATA=true
+uvicorn main:app --reload
+
+# Run with live APIs
+export USE_MOCK_DATA=false
+export NASA_FIRMS_API_KEY=your_key
 uvicorn main:app --reload
 ```
 
@@ -102,6 +151,15 @@ uvicorn main:app --reload
 cd frontend
 npm install
 npm run dev
+```
+
+### Environment Variables
+
+Backend (.env):
+```
+DATABASE_URL=postgresql://geoint:geoint_dev@localhost:5432/geoint
+NASA_FIRMS_API_KEY=your_api_key_here
+USE_MOCK_DATA=true  # Set to false for live data
 ```
 
 ## Security Notes

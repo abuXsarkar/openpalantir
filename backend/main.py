@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import asyncio
-from routers import aviation, maritime, thermal, events, alerts
+from routers import aviation, maritime, thermal, events, alerts, system
 from services.data_poller import DataPoller
 from database import init_db
 
@@ -33,6 +33,7 @@ app.include_router(maritime.router, prefix="/api/maritime", tags=["maritime"])
 app.include_router(thermal.router, prefix="/api/thermal", tags=["thermal"])
 app.include_router(events.router, prefix="/api/events", tags=["events"])
 app.include_router(alerts.router, prefix="/api/alerts", tags=["alerts"])
+app.include_router(system.router, prefix="/api/system", tags=["system"])
 
 @app.get("/")
 async def root():

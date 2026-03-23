@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import WorldMap from '../components/WorldMap'
 import TacticalSidebar from '../components/TacticalSidebar'
 import TimelineSlider from '../components/TimelineSlider'
+import SystemStatus from '../components/SystemStatus'
 
 export default function Home() {
   const [aircraftData, setAircraftData] = useState(null)
@@ -39,6 +40,7 @@ export default function Home() {
     <div className="h-screen w-screen flex">
       <TacticalSidebar alerts={alerts} />
       <div className="flex-1 relative">
+        <SystemStatus />
         <WorldMap 
           aircraftData={aircraftData}
           thermalData={thermalData}

@@ -6,7 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 const MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN'
 
-export default function WorldMap({ aircraftData, thermalData }) {
+export default function WorldMap({ aircraftData, thermalData, sensitiveLocations }) {
   const mapRef = useRef(null)
 
   const aircraftLayer = {
@@ -29,6 +29,37 @@ export default function WorldMap({ aircraftData, thermalData }) {
       'circle-opacity': 0.7,
       'circle-stroke-width': 1,
       'circle-stroke-color': '#ff0055'
+    }
+  }
+
+  const sensitiveLayer = {
+    id: 'sensitive',
+    type: 'circle',
+    paint: {
+      'circle-radius': 10,
+      'circle-color': '#ff0055',
+      'circle-opacity': 0.3,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#ff0055'
+    }
+  }
+
+  const geofenceLayer = {
+    id: 'geofence',
+    type: 'circle',
+    paint: {
+      'circle-radius': {
+        stops: [
+          [0, 0],
+          [20, 500000]
+        ],
+        base: 2
+      },
+      'circle-color': '#ff0055',
+      'circle-opacity': 0.05,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#ff0055',
+      'circle-stroke-opacity': 0.3
     }
   }
 
@@ -56,6 +87,17 @@ export default function WorldMap({ aircraftData, thermalData }) {
         <Source id="thermal-source" type="geojson" data={thermalData}>
           <Layer {...thermalLayer} />
         </Source>
+      )}
+
+      {sensitiveLocations && (
+        <>
+          <Source id="geofence-source" type="geojson" data={sensitiveLocations}>
+            <Layer {...geofenceLayer} />
+          </Source>
+          <Source id="sensitive-source" type="geojson" data={sensitiveLocations}>
+            <Layer {...sensitiveLayer} />
+          </Source>
+        </>
       )}
     </Map>
   )

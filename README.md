@@ -14,16 +14,19 @@ A modular OSINT dashboard integrating NASA FIRMS, OpenSky, and Maritime AIS feed
 ### Prerequisites
 - Docker & Docker Compose
 - Mapbox API token (free tier: https://account.mapbox.com/)
-- NASA FIRMS API key (optional, for thermal data: https://firms.modaps.eosdis.nasa.gov/api/)
+- NASA FIRMS API key (get it here: https://firms.modaps.eosdis.nasa.gov/api/area/)
 
 ### Setup
 
-1. Add your Mapbox token to `frontend/components/WorldMap.tsx`:
+1. Get your NASA FIRMS API key:
+   - Visit https://firms.modaps.eosdis.nasa.gov/api/area/
+   - Request a free API key (instant approval)
+   - Set it as environment variable: `export NASA_FIRMS_API_KEY=your_key`
+
+2. Add your Mapbox token to `frontend/components/WorldMap.tsx`:
 ```typescript
 const MAPBOX_TOKEN = 'your_token_here'
 ```
-
-2. (Optional) Add NASA FIRMS API key to `backend/services/data_poller.py`
 
 3. Start the stack:
 ```bash
@@ -39,6 +42,9 @@ docker-compose up --build
 
 ### Current
 - Real-time aviation tracking (Middle East region)
+- NASA FIRMS thermal anomaly detection (3 conflict zones)
+- Intelligent alert system with proximity detection
+- Geofencing around 9 sensitive locations (airbases, nuclear sites, chokepoints)
 - Tactical dark-mode UI with alert sidebar
 - Timeline scrubber (72-hour window)
 - GeoJSON-based data pipeline
@@ -46,10 +52,11 @@ docker-compose up --build
 
 ### Roadmap
 - Maritime AIS integration (Spire/Datalastic)
-- NASA FIRMS thermal anomaly detection
 - GDELT geopolitical event clustering
-- Conflict alert system (proximity-based)
-- Heatmap visualization for tension zones
+- Historical playback (functional timeline)
+- WebSocket real-time updates
+- Click handlers for detailed entity info
+- Layer toggles (show/hide data sources)
 
 ## Data Layers
 
@@ -57,15 +64,29 @@ docker-compose up --build
 |-------|--------|------------------|--------|
 | Aviation | OpenSky Network | 30s | ✅ Active |
 | Maritime | AIS (TBD) | 60s | 🔄 Planned |
-| Thermal | NASA FIRMS | 5m | 🔄 Planned |
+| Thermal | NASA FIRMS | 5m | ✅ Active |
 | Events | GDELT | 15m | 🔄 Planned |
+| Alerts | Internal | Real-time | ✅ Active |
 
 ## Intelligence Logic
 
 The system monitors for:
-- Military aircraft callsigns (RCH, CNV prefixes)
-- Thermal anomalies near sensitive locations
+- Military aircraft callsigns (RCH, CNV, REACH, SPAR, etc.)
+- Thermal anomalies within 5km of sensitive locations
+- High-confidence (>70%) thermal events near nuclear facilities and airbases
+- Aircraft within 50km of monitored locations
 - Event clustering in flashpoint regions
+
+### Monitored Locations
+- Al Udeid Air Base (Qatar)
+- Al Dhafra Air Base (UAE)
+- Incirlik Air Base (Turkey)
+- Strait of Hormuz (Iran/Oman)
+- Bosphorus Strait (Turkey)
+- Sevastopol Naval Base (Crimea)
+- Bushehr Nuclear Plant (Iran)
+- Natanz Nuclear Facility (Iran)
+- Diego Garcia (UK/US)
 
 ## Development
 

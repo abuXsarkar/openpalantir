@@ -18,6 +18,7 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql://geoint:geoint_dev@postgres:5432/geoint
+      NASA_FIRMS_API_KEY: ${NASA_FIRMS_API_KEY:-your_api_key_here}
     depends_on:
       - postgres
     volumes:

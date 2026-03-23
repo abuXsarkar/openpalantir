@@ -29,18 +29,36 @@ export default function TacticalSidebar({ alerts }) {
             alerts.map((alert, idx) => (
               <div 
                 key={idx}
-                className="bg-tactical-bg rounded p-3 border-l-4 border-tactical-warning"
+                className={`bg-tactical-bg rounded p-3 border-l-4 ${
+                  alert.severity === 'high' ? 'border-tactical-danger' : 
+                  alert.severity === 'medium' ? 'border-tactical-warning' : 
+                  'border-tactical-accent'
+                }`}
               >
                 <div className="flex items-start justify-between mb-1">
-                  <span className="text-xs font-bold text-tactical-warning uppercase">
-                    {alert.type}
+                  <span className={`text-xs font-bold uppercase ${
+                    alert.severity === 'high' ? 'text-tactical-danger' : 
+                    alert.severity === 'medium' ? 'text-tactical-warning' : 
+                    'text-tactical-accent'
+                  }`}>
+                    {alert.type.replace('_', ' ')}
                   </span>
                   <span className="text-xs text-gray-500">
-                    {format(alert.time, 'HH:mm:ss')}
+                    {new Date(alert.timestamp).toLocaleTimeString()}
                   </span>
                 </div>
                 <div className="text-sm">{alert.message}</div>
                 <div className="text-xs text-gray-500 mt-1">{alert.location}</div>
+                {alert.callsign && (
+                  <div className="text-xs text-tactical-accent mt-1">
+                    Callsign: {alert.callsign}
+                  </div>
+                )}
+                {alert.brightness && (
+                  <div className="text-xs text-tactical-warning mt-1">
+                    Brightness: {alert.brightness}K | Confidence: {alert.confidence}%
+                  </div>
+                )}
               </div>
             ))
           )}
@@ -59,7 +77,7 @@ export default function TacticalSidebar({ alerts }) {
           </div>
           <div className="bg-tactical-bg rounded p-2">
             <div className="text-xs text-gray-500">THERMAL</div>
-            <div className="text-lg font-bold text-gray-600">●</div>
+            <div className="text-lg font-bold text-tactical-warning">●</div>
           </div>
         </div>
       </div>

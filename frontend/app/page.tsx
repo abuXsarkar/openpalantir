@@ -8,34 +8,23 @@ import TimelineSlider from '../components/TimelineSlider'
 export default function Home() {
   const [aircraftData, setAircraftData] = useState(null)
   const [thermalData, setThermalData] = useState(null)
+  const [sensitiveLocations, setSensitiveLocations] = useState(null)
   const [alerts, setAlerts] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [aircraft, thermal] = await Promise.all([
+        const [aircraft, thermal, locations, alertsData] = await Promise.all([
           fetch('http://localhost:8000/api/aviation/positions').then(r => r.json()),
-          fetch('http://localhost:8000/api/thermal/anomalies').then(r => r.json())
+          fetch('http://localhost:8000/api/thermal/anomalies').then(r => r.json()),
+          fetch('http://localhost:8000/api/alerts/locations').then(r => r.json()),
+          fetch('http://localhost:8000/api/alerts/current').then(r => r.json())
         ])
         
         setAircraftData(aircraft)
         setThermalData(thermal)
-        
-        // Generate alerts
-        const newAlerts = []
-        if (aircraft.features) {
-          aircraft.features.forEach(f => {
-            if (f.properties.callsign?.includes('RCH') || f.properties.callsign?.includes('CNV')) {
-              newAlerts.push({
-                type: 'military',
-                message: `Military aircraft detected: ${f.properties.callsign}`,
-                location: f.properties.country,
-                time: new Date()
-              })
-            }
-          })
-        }
-        setAlerts(newAlerts)
+        setSensitiveLocations(locations)
+        setAlerts(alertsData.alerts || [])
       } catch (error) {
         console.error('Data fetch error:', error)
       }
@@ -53,6 +42,7 @@ export default function Home() {
         <WorldMap 
           aircraftData={aircraftData}
           thermalData={thermalData}
+          sensitiveLocations={sensitiveLocations}
         />
         <TimelineSlider />
       </div>

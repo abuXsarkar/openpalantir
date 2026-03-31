@@ -74,6 +74,10 @@ The system automatically detects API availability:
 
 ### Current
 - Real-time aviation tracking (Middle East region)
+- Maritime vessel tracking (AIS simulation)
+- Satellite tracking (ISS, reconnaissance, imaging satellites)
+- Cyber incident monitoring (DDoS, breaches, APT activity)
+- Military installation mapping (nuclear sites, airbases)
 - NASA FIRMS thermal anomaly detection (3 conflict zones)
 - Intelligent alert system with proximity detection
 - Geofencing around 9 sensitive locations (airbases, nuclear sites, chokepoints)
@@ -87,27 +91,39 @@ The system automatically detects API availability:
 
 ### Mock Data Includes
 - 10 realistic aircraft positions with military callsigns
+- 8 maritime vessels (tankers, military ships, cargo)
+- 6 satellites (ISS, reconnaissance, imaging)
 - 8 thermal anomalies in active conflict zones
+- 4 cyber security incidents
+- 5 military installations (nuclear, airbases)
 - Historical data simulation for timeline testing
 - Automatic alert generation based on proximity rules
 
 ### Roadmap
-- Maritime AIS integration (Spire/Datalastic)
+- Live AIS integration (Spire Maritime/MarineTraffic)
+- Real satellite TLE data (Space-Track.org)
 - GDELT geopolitical event clustering
 - Historical playback (functional timeline)
 - WebSocket real-time updates
 - Click handlers for detailed entity info
 - Layer toggles (show/hide data sources)
+- Heatmap visualization for tension zones
+- Missile launch detection
+- Nuclear facility monitoring
+- Supply chain tracking
 
 ## Data Layers
 
-| Layer | Source | Update Frequency | Status |
-|-------|--------|------------------|--------|
-| Aviation | OpenSky Network | 30s | ✅ Active |
-| Maritime | AIS (TBD) | 60s | 🔄 Planned |
-| Thermal | NASA FIRMS | 5m | ✅ Active |
-| Events | GDELT | 15m | 🔄 Planned |
-| Alerts | Internal | Real-time | ✅ Active |
+| Layer | Source | Update Frequency | Status | Description |
+|-------|--------|------------------|--------|-------------|
+| Aviation | OpenSky Network | 30s | ✅ Active | Aircraft positions with military callsigns |
+| Maritime | AIS (Mock) | 60s | ✅ Active | Vessel tracking (tankers, cargo, military ships) |
+| Thermal | NASA FIRMS | 5m | ✅ Active | Fire/explosion detection in conflict zones |
+| Satellites | TLE/Orbital (Mock) | 2m | ✅ Active | ISS, reconnaissance, imaging satellites |
+| Cyber | Threat Intel (Mock) | 15m | ✅ Active | DDoS, breaches, APT activity |
+| Military Bases | Static DB | - | ✅ Active | Nuclear facilities, airbases, naval ports |
+| Events | GDELT | 15m | 🔄 Planned | Geopolitical events with coordinates |
+| Alerts | Internal | Real-time | ✅ Active | Proximity-based intelligence alerts |
 
 ## Intelligence Logic
 

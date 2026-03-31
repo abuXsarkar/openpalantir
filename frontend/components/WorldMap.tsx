@@ -6,7 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN'
 
-export default function WorldMap({ aircraftData, thermalData, sensitiveLocations }) {
+export default function WorldMap({ aircraftData, thermalData, sensitiveLocations, maritimeData, satelliteData, cyberData, militaryBases }) {
   const mapRef = useRef(null)
 
   const aircraftLayer = {
@@ -63,6 +63,54 @@ export default function WorldMap({ aircraftData, thermalData, sensitiveLocations
     }
   }
 
+  const maritimeLayer = {
+    id: 'maritime',
+    type: 'circle',
+    paint: {
+      'circle-radius': 8,
+      'circle-color': '#00d4ff',
+      'circle-opacity': 0.8,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#0088cc'
+    }
+  }
+
+  const satelliteLayer = {
+    id: 'satellite',
+    type: 'circle',
+    paint: {
+      'circle-radius': 6,
+      'circle-color': '#ffaa00',
+      'circle-opacity': 0.9,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#ff6600'
+    }
+  }
+
+  const cyberLayer = {
+    id: 'cyber',
+    type: 'circle',
+    paint: {
+      'circle-radius': 10,
+      'circle-color': '#ff00ff',
+      'circle-opacity': 0.6,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#cc00cc'
+    }
+  }
+
+  const militaryBaseLayer = {
+    id: 'military',
+    type: 'circle',
+    paint: {
+      'circle-radius': 8,
+      'circle-color': '#ff0000',
+      'circle-opacity': 0.7,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#990000'
+    }
+  }
+
   return (
     <Map
       ref={mapRef}
@@ -98,6 +146,30 @@ export default function WorldMap({ aircraftData, thermalData, sensitiveLocations
             <Layer {...sensitiveLayer} />
           </Source>
         </>
+      )}
+
+      {maritimeData && (
+        <Source id="maritime-source" type="geojson" data={maritimeData}>
+          <Layer {...maritimeLayer} />
+        </Source>
+      )}
+
+      {satelliteData && (
+        <Source id="satellite-source" type="geojson" data={satelliteData}>
+          <Layer {...satelliteLayer} />
+        </Source>
+      )}
+
+      {cyberData && (
+        <Source id="cyber-source" type="geojson" data={cyberData}>
+          <Layer {...cyberLayer} />
+        </Source>
+      )}
+
+      {militaryBases && (
+        <Source id="military-source" type="geojson" data={militaryBases}>
+          <Layer {...militaryBaseLayer} />
+        </Source>
       )}
     </Map>
   )

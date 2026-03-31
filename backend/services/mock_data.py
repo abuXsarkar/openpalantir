@@ -35,6 +35,45 @@ class MockDataGenerator:
         {"lat": 12.8628, "lon": 45.0369, "brightness": 318.6, "confidence": 83, "satellite": "NOAA-20", "region": "Yemen"},
     ]
     
+    # Maritime vessels (AIS data simulation)
+    SAMPLE_VESSELS = [
+        {"mmsi": "636019825", "name": "IRAN SHAHED", "type": "Tanker", "lat": 26.5667, "lon": 56.2500, "speed": 12.3, "course": 285, "flag": "Iran", "destination": "Bandar Abbas"},
+        {"mmsi": "477995900", "name": "HONG KONG TRADER", "type": "Cargo", "lat": 22.3193, "lon": 114.1694, "speed": 8.5, "course": 180, "flag": "Hong Kong", "destination": "Singapore"},
+        {"mmsi": "636092456", "name": "GRACE 1", "type": "Tanker", "lat": 36.1408, "lon": -5.3536, "speed": 0.0, "course": 0, "flag": "Iran", "destination": "Gibraltar"},
+        {"mmsi": "273353800", "name": "ADMIRAL GRIGOROVICH", "type": "Military", "lat": 44.6167, "lon": 33.5333, "speed": 15.2, "course": 90, "flag": "Russia", "destination": "Sevastopol"},
+        {"mmsi": "538006090", "name": "USS ABRAHAM LINCOLN", "type": "Military", "lat": 25.2867, "lon": 55.3644, "speed": 18.0, "course": 270, "flag": "USA", "destination": "Persian Gulf"},
+        {"mmsi": "477123456", "name": "COSCO SHIPPING", "type": "Container", "lat": 1.2897, "lon": 103.8501, "speed": 14.5, "course": 45, "flag": "China", "destination": "Shanghai"},
+        {"mmsi": "636019999", "name": "SABITI", "type": "Tanker", "lat": 27.1833, "lon": 56.2667, "speed": 10.1, "course": 315, "flag": "Iran", "destination": "Jeddah"},
+        {"mmsi": "229767000", "name": "FS CHARLES DE GAULLE", "type": "Military", "lat": 35.5000, "lon": 33.0000, "speed": 12.0, "course": 180, "flag": "France", "destination": "Eastern Med"},
+    ]
+    
+    # Satellite passes (ISS, reconnaissance, imaging satellites)
+    SAMPLE_SATELLITES = [
+        {"norad_id": "25544", "name": "ISS (ZARYA)", "lat": 28.5, "lon": 51.2, "alt": 408, "velocity": 7.66, "type": "Space Station"},
+        {"norad_id": "43013", "name": "USA 290 (KH-11)", "lat": 33.3, "lon": 44.4, "alt": 270, "velocity": 7.8, "type": "Reconnaissance"},
+        {"norad_id": "37348", "name": "COSMO-SKYMED 1", "lat": 36.2, "lon": 37.1, "alt": 619, "velocity": 7.5, "type": "SAR Imaging"},
+        {"norad_id": "40732", "name": "GAOFEN-2", "lat": 26.5, "lon": 56.3, "alt": 631, "velocity": 7.5, "type": "Optical Imaging"},
+        {"norad_id": "44506", "name": "USA 314 (TOPAZ)", "lat": 44.6, "lon": 33.5, "alt": 1000, "velocity": 7.3, "type": "SIGINT"},
+        {"norad_id": "41866", "name": "SENTINEL-1B", "lat": 35.0, "lon": 35.0, "alt": 693, "velocity": 7.5, "type": "SAR Imaging"},
+    ]
+    
+    # Cyber incidents and infrastructure monitoring
+    SAMPLE_CYBER_EVENTS = [
+        {"lat": 35.6892, "lon": 51.3890, "city": "Tehran", "country": "Iran", "type": "DDoS Attack", "severity": "high", "target": "Government Infrastructure"},
+        {"lat": 55.7558, "lon": 37.6173, "city": "Moscow", "country": "Russia", "type": "Data Breach", "severity": "medium", "target": "Energy Sector"},
+        {"lat": 31.2304, "lon": 121.4737, "city": "Shanghai", "country": "China", "type": "APT Activity", "severity": "high", "target": "Defense Contractors"},
+        {"lat": 33.8869, "lon": 35.5131, "city": "Beirut", "country": "Lebanon", "type": "Malware Campaign", "severity": "medium", "target": "Banking Sector"},
+    ]
+    
+    # Military installations and bases
+    SAMPLE_MILITARY_BASES = [
+        {"name": "Natanz Nuclear Facility", "lat": 33.7242, "lon": 51.7281, "country": "Iran", "type": "Nuclear", "status": "Active"},
+        {"name": "Fordow Fuel Enrichment Plant", "lat": 34.9564, "lon": 50.9864, "country": "Iran", "type": "Nuclear", "status": "Active"},
+        {"name": "Khmeimim Air Base", "lat": 35.4017, "lon": 35.9489, "country": "Syria", "type": "Airbase", "status": "Active"},
+        {"name": "Tartus Naval Base", "lat": 34.8833, "lon": 35.8833, "country": "Syria", "type": "Naval", "status": "Active"},
+        {"name": "Hmeimim Air Base", "lat": 35.4017, "lon": 35.9489, "country": "Syria", "type": "Airbase", "status": "Active"},
+    ]
+    
     def __init__(self):
         self.time_offset = 0  # For simulating time progression
     
@@ -80,6 +119,56 @@ class MockDataGenerator:
             anomalies.append(anomaly)
         
         return anomalies
+    
+    def generate_maritime_data(self, count: int = 8) -> List[Dict]:
+        """Generate realistic maritime vessel data"""
+        vessels = []
+        
+        for i in range(min(count, len(self.SAMPLE_VESSELS))):
+            sample = self.SAMPLE_VESSELS[i].copy()
+            
+            # Add slight variations
+            sample['lat'] += random.uniform(-0.1, 0.1)
+            sample['lon'] += random.uniform(-0.1, 0.1)
+            sample['speed'] += random.uniform(-1, 1)
+            sample['course'] = (sample['course'] + random.uniform(-5, 5)) % 360
+            sample['timestamp'] = datetime.utcnow()
+            
+            vessels.append(sample)
+        
+        return vessels
+    
+    def generate_satellite_data(self, count: int = 6) -> List[Dict]:
+        """Generate satellite tracking data"""
+        satellites = []
+        
+        for i in range(min(count, len(self.SAMPLE_SATELLITES))):
+            sample = self.SAMPLE_SATELLITES[i].copy()
+            
+            # Simulate orbital movement
+            sample['lat'] += random.uniform(-2, 2)
+            sample['lon'] += random.uniform(-5, 5)
+            sample['timestamp'] = datetime.utcnow()
+            
+            satellites.append(sample)
+        
+        return satellites
+    
+    def generate_cyber_events(self, count: int = 4) -> List[Dict]:
+        """Generate cyber incident data"""
+        events = []
+        base_time = datetime.utcnow()
+        
+        for i in range(min(count, len(self.SAMPLE_CYBER_EVENTS))):
+            event = self.SAMPLE_CYBER_EVENTS[i].copy()
+            event['timestamp'] = base_time - timedelta(hours=random.randint(1, 24))
+            events.append(event)
+        
+        return events
+    
+    def generate_military_bases(self) -> List[Dict]:
+        """Generate military installation data"""
+        return self.SAMPLE_MILITARY_BASES.copy()
     
     def generate_geopolitical_events(self, count: int = 5) -> List[Dict]:
         """Generate sample geopolitical events"""

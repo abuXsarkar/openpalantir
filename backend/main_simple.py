@@ -147,6 +147,120 @@ async def get_alerts():
         "alerts": alerts
     }
 
+@app.get("/api/maritime/vessels")
+async def get_vessels():
+    """Get maritime vessel positions (AIS data)"""
+    vessels = mock_generator.generate_maritime_data()
+    
+    features = []
+    for vessel in vessels:
+        features.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [vessel['lon'], vessel['lat']]
+            },
+            "properties": {
+                "mmsi": vessel['mmsi'],
+                "name": vessel['name'],
+                "type": vessel['type'],
+                "speed": vessel['speed'],
+                "course": vessel['course'],
+                "flag": vessel['flag'],
+                "destination": vessel['destination'],
+                "vessel_type": "vessel"
+            }
+        })
+    
+    return {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+@app.get("/api/satellites/tracking")
+async def get_satellites():
+    """Get satellite tracking data"""
+    satellites = mock_generator.generate_satellite_data()
+    
+    features = []
+    for sat in satellites:
+        features.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [sat['lon'], sat['lat']]
+            },
+            "properties": {
+                "norad_id": sat['norad_id'],
+                "name": sat['name'],
+                "altitude": sat['alt'],
+                "velocity": sat['velocity'],
+                "type": sat['type'],
+                "satellite_type": "satellite"
+            }
+        })
+    
+    return {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+@app.get("/api/cyber/incidents")
+async def get_cyber_incidents():
+    """Get cyber security incidents"""
+    incidents = mock_generator.generate_cyber_events()
+    
+    features = []
+    for incident in incidents:
+        features.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [incident['lon'], incident['lat']]
+            },
+            "properties": {
+                "city": incident['city'],
+                "country": incident['country'],
+                "type": incident['type'],
+                "severity": incident['severity'],
+                "target": incident['target'],
+                "timestamp": incident['timestamp'].isoformat(),
+                "incident_type": "cyber"
+            }
+        })
+    
+    return {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+@app.get("/api/military/bases")
+async def get_military_bases():
+    """Get military installations"""
+    bases = mock_generator.generate_military_bases()
+    
+    features = []
+    for base in bases:
+        features.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [base['lon'], base['lat']]
+            },
+            "properties": {
+                "name": base['name'],
+                "country": base['country'],
+                "type": base['type'],
+                "status": base['status'],
+                "base_type": "military"
+            }
+        })
+    
+    return {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
 @app.get("/api/system/status")
 async def get_status():
     """Get system status"""
@@ -161,6 +275,22 @@ async def get_status():
             "nasa_firms": {
                 "available": False,
                 "status": "using_mock"
+            },
+            "maritime_ais": {
+                "available": False,
+                "status": "using_mock"
+            },
+            "satellite_tracking": {
+                "available": False,
+                "status": "using_mock"
             }
+        },
+        "layers": {
+            "aviation": True,
+            "thermal": True,
+            "maritime": True,
+            "satellites": True,
+            "cyber": True,
+            "military_bases": True
         }
     }

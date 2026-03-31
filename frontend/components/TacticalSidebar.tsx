@@ -66,18 +66,30 @@ export default function TacticalSidebar({ alerts }) {
       </div>
 
       <div className="p-4 border-t border-tactical-border">
-        <div className="grid grid-cols-3 gap-2 text-center">
+        <div className="grid grid-cols-3 gap-2 text-center text-xs">
           <div className="bg-tactical-bg rounded p-2">
-            <div className="text-xs text-gray-500">AVIATION</div>
+            <div className="text-gray-500">AVIATION</div>
             <div className="text-lg font-bold text-tactical-accent">●</div>
           </div>
           <div className="bg-tactical-bg rounded p-2">
-            <div className="text-xs text-gray-500">MARITIME</div>
-            <div className="text-lg font-bold text-gray-600">●</div>
+            <div className="text-gray-500">MARITIME</div>
+            <div className="text-lg font-bold text-blue-400">●</div>
           </div>
           <div className="bg-tactical-bg rounded p-2">
-            <div className="text-xs text-gray-500">THERMAL</div>
+            <div className="text-gray-500">THERMAL</div>
             <div className="text-lg font-bold text-tactical-warning">●</div>
+          </div>
+          <div className="bg-tactical-bg rounded p-2">
+            <div className="text-gray-500">SATELLITES</div>
+            <div className="text-lg font-bold text-yellow-400">●</div>
+          </div>
+          <div className="bg-tactical-bg rounded p-2">
+            <div className="text-gray-500">CYBER</div>
+            <div className="text-lg font-bold text-purple-400">●</div>
+          </div>
+          <div className="bg-tactical-bg rounded p-2">
+            <div className="text-gray-500">MILITARY</div>
+            <div className="text-lg font-bold text-red-500">●</div>
           </div>
         </div>
       </div>

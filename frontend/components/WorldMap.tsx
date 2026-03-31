@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Map, { Source, Layer, NavigationControl } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-const MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN'
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN'
 
 export default function WorldMap({ aircraftData, thermalData, sensitiveLocations }) {
   const mapRef = useRef(null)
